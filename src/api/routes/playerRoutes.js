@@ -2,10 +2,22 @@ const express = require('express')
 const router = express.Router()
 const playerController = require('../controllers/playerController')
 
-router.get('/player/:id', playerController.getPlayerById)
+router.get(
+  '/:id',
+  /* #swagger.tags = ['Players'] */
+  playerController.getPlayerById
+)
 
-router.post('/player', playerController.creatPlayer)
+router.post(
+  '/',
+  /* #swagger.tags = ['Players'] */
+  playerController.creatPlayer
+)
 
-router.delete('/player/:id', playerController.deletePlayer)
+router.delete(
+  '/:id',
+  /* #swagger.tags = ['Players'] */
+  playerController.deletePlayer
+)
 
 module.exports = router

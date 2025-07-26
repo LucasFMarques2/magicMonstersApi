@@ -17,7 +17,12 @@ exports.up = function (knex) {
     table.text('gif_defend').notNullable()
     table.text('gif_special').notNullable()
     table.text('gif_hit').notNullable()
-    table.text('gif_death').notNullable()
+    table
+      .text('gif_death')
+      .notNullable()
+      .defaultTo(
+        'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753548904/Death_yhwi7z.gif'
+      )
   })
 }
 

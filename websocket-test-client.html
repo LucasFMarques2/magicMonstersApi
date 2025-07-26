@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente de Teste WebSocket - Batalha de Monstros</title>
+    <style>
+        body { font-family: sans-serif; background: #282c34; color: white; padding: 20px; display: flex; gap: 20px; }
+        .client { flex: 1; border: 3px solid #61dafb; padding: 15px; border-radius: 10px; transition: border-color 0.3s; }
+        .client.active-turn { border-color: #50fa7b; } /* Destaque para o turno ativo */
+        input, button { padding: 10px; margin: 5px; border-radius: 5px; border: 1px solid #61dafb; background: #333; color: white; width: calc(100% - 22px); }
+        button { cursor: pointer; background: #61dafb; color: black; font-weight: bold; }
+        button:disabled { background: #555; color: #888; cursor: not-allowed; }
+        textarea { width: 100%; height: 300px; background: #20232a; color: #a9f; margin-top: 20px; border-radius: 5px; padding: 10px; box-sizing: border-box; resize: vertical; }
+        .hidden { display: none; }
+        h1, h2 { text-align: center; color: #61dafb; }
+        .battle-info { background: #20232a; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
+        .battle-info p { margin: 5px 0; }
+        .battle-info span { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="client" id="client1">
+        <h1>Jogador 1</h1>
+        <div class="setup">
+            <input type="text" class="playerId" placeholder="Seu Player ID">
+            <input type="text" class="monsterId" placeholder="ID do Monstro Escolhido">
+            <button class="connectBtn">Conectar e Procurar Partida</button>
+            <button class="cancelBtn hidden">Cancelar Busca</button>
+        </div>
+        <div class="battle-controls hidden">
+            <h2>Ações de Batalha</h2>
+            <div class="battle-info">
+                <p>Batalha ID: <span class="battleId"></span> | Turno de: <span class="turnPlayer" style="font-weight:bold; color: #50fa7b;"></span></p>
+                <p>Meu HP: <span class="myHp" style="color: lightgreen;"></span></p>
+                <p>HP do Oponente: <span class="opponentHp" style="color: lightcoral;"></span></p>
+            </div>
+            <button data-action="attack">Atacar</button>
+            <button data-action="defend">Defender</button>
+            <button data-action="special">Especial</button>
+            <button data-action="forfeit">Desistir</button>
+        </div>
+        <h2>Log de Eventos</h2>
+        <textarea class="log" readonly></textarea>
+    </div>
+    <div class="client" id="client2">
+        <h1>Jogador 2</h1>
+        <div class="setup">
+            <input type="text" class="playerId" placeholder="Seu Player ID">
+            <input type="text" class="monsterId" placeholder="ID do Monstro Escolhido">
+            <button class="connectBtn">Conectar e Procurar Partida</button>
+            <button class="cancelBtn hidden">Cancelar Busca</button>
+        </div>
+        <div class="battle-controls hidden">
+            <h2>Ações de Batalha</h2>
+             <div class="battle-info">
+                <p>Batalha ID: <span class="battleId"></span> | Turno de: <span class="turnPlayer" style="font-weight:bold; color: #50fa7b;"></span></p>
+                <p>Meu HP: <span class="myHp" style="color: lightgreen;"></span></p>
+                <p>HP do Oponente: <span class="opponentHp" style="color: lightcoral;"></span></p>
+            </div>
+            <button data-action="attack">Atacar</button>
+            <button data-action="defend">Defender</button>
+            <button data-action="special">Especial</button>
+            <button data-action="forfeit">Desistir</button>
+        </div>
+        <h2>Log de Eventos</h2>
+        <textarea class="log" readonly></textarea>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script>
+        function setupClient(clientId) {
+            const socketUrl = 'http://localhost:3333';
+            let socket;
+            let currentBattle = null;
+            let currentPlayerId = null;
+
+            const container = document.getElementById(clientId);
+            const logEl = container.querySelector('textarea.log');
+            const connectBtn = container.querySelector('.connectBtn');
+            const cancelBtn = container.querySelector('.cancelBtn');
+            const setupDiv = container.querySelector('.setup');
+            const battleDiv = container.querySelector('.battle-controls');
+            const battleIdSpan = container.querySelector('.battleId');
+            const turnPlayerSpan = container.querySelector('.turnPlayer');
+            const myHpSpan = container.querySelector('.myHp');
+            const opponentHpSpan = container.querySelector('.opponentHp');
+            const playerIdInput = container.querySelector('.playerId');
+            const monsterIdInput = container.querySelector('.monsterId');
+
+            function log(message) {
+                logEl.value += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+
+            connectBtn.addEventListener('click', () => {
+                if (!playerIdInput.value || !monsterIdInput.value) {
+                    alert('Por favor, insira o ID do Jogador e do Monstro.');
+                    return;
+                }
+                currentPlayerId = parseInt(playerIdInput.value, 10);
+                log(`Conectando ao servidor...`);
+                socket = io(socketUrl, { forceNew: true });
+
+                socket.on('connect', () => {
+                    log('✅ Conectado! Enviando pedido de partida...');
+                    socket.emit('find_match', { playerId: currentPlayerId, monsterId: parseInt(monsterIdInput.value, 10) });
+                    connectBtn.disabled = true;
+                    cancelBtn.classList.remove('hidden');
+                });
+
+                socket.on('disconnect', () => log('❌ Desconectado.'));
+                socket.on('matchmaking_status', (data) => log(`[STATUS] ${data.message}`));
+                socket.on('matchmaking_error', (data) => { log(`[ERRO] ${data.message}`); connectBtn.disabled = false; });
+                socket.on('match_found', (data) => {
+                    log(`[PARTIDA ENCONTRADA!] Batalha ID: ${data.battle.id}`);
+                    currentBattle = data.battle;
+                    setupDiv.classList.add('hidden');
+                    battleDiv.classList.remove('hidden');
+                    updateBattleUI();
+                });
+                socket.on('battle_update', (data) => {
+                    log(`[UPDATE] Batalha atualizada!`);
+                    currentBattle = data.battle;
+                    updateBattleUI();
+                });
+                socket.on('battle_end', (data) => {
+                    log(`[FIM DE JOGO] ${data.message}`);
+                    battleDiv.classList.add('hidden');
+                });
+                socket.on('battle_error', (data) => log(`[ERRO DE BATALHA] ${data.message}`));
+            });
+
+            cancelBtn.addEventListener('click', () => {
+                if (socket) {
+                    socket.emit('cancel_matchmaking');
+                    socket.disconnect();
+                    connectBtn.disabled = false;
+                    cancelBtn.classList.add('hidden');
+                }
+            });
+
+            battleDiv.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const action = e.target.dataset.action;
+                    log(`Enviando ação: ${action}`);
+                    socket.emit('battle_action', {
+                        battleId: currentBattle.id,
+                        playerId: currentPlayerId,
+                        actionType: action
+                    });
+                }
+            });
+
+            function updateBattleUI() {
+                if (!currentBattle) return;
+
+                const state = currentBattle.battle_state;
+                const turnPlayerId = currentBattle.current_turn_player_id;
+                const isMyTurn = turnPlayerId === currentPlayerId;
+
+                battleIdSpan.textContent = currentBattle.id;
+                turnPlayerSpan.textContent = `Jogador ${turnPlayerId} ${isMyTurn ? '(SUA VEZ!)' : ''}`;
+
+                // Atualiza o destaque visual do turno
+                if (isMyTurn) {
+                    container.classList.add('active-turn');
+                } else {
+                    container.classList.remove('active-turn');
+                }
+
+                // Determina quem sou eu e quem é o oponente no estado da batalha
+                const myPlayerState = state.player1.id === currentPlayerId ? state.player1 : state.player2;
+                const opponentPlayerState = state.player1.id === currentPlayerId ? state.player2 : state.player1;
+
+                myHpSpan.textContent = myPlayerState.hp;
+                opponentHpSpan.textContent = opponentPlayerState.hp;
+
+                battleDiv.querySelectorAll('button').forEach(btn => {
+                    if (btn.dataset.action !== 'forfeit') {
+                        btn.disabled = !isMyTurn || currentBattle.status === 'finished';
+                    } else {
+                        btn.disabled = currentBattle.status === 'finished';
+                    }
+                });
+            }
+        }
+        setupClient('client1');
+        setupClient('client2');
+    </script>
+</body>
+</html>

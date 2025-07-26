@@ -3,6 +3,8 @@ require('dotenv').config()
 const http = require('http')
 const { Server } = require('socket.io')
 const app = require('./app')
+const matchmakingHandler = require('./infra/websocket/matchmakingHandler')
+const battleActionsHandler = require('./infra/websocket/battleActionsHandler')
 
 const PORT = process.env.PORT || 3333
 
@@ -21,6 +23,9 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
     console.log(`❌ Usuário desconectado: ${socket.id}`)
   })
+
+  matchmakingHandler(io, socket)
+  battleActionsHandler(io, socket)
 })
 
 httpServer.listen(PORT, () => {

@@ -2,12 +2,12 @@ const { Router } = require('express')
 
 const characterRoutes = require('./characterRoutes')
 const playerRoutes = require('./playerRoutes')
-//const monsterRoutes = require('./monsterRoutes')
+const monsterRoutes = require('./monsterRoutes')
 
 const router = Router()
 
-router.use(characterRoutes)
-router.use(playerRoutes)
-//router.use(monsterRoutes)
+router.use('/character', characterRoutes)
+router.use('/player', playerRoutes)
+router.use('/monster', monsterRoutes)
 
 module.exports = router
