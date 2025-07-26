@@ -1,5 +1,4 @@
 const battleRepository = require('../../repositories/battleRepository')
-const playerRepository = require('../../repositories/playerRepository')
 const monsterRepository = require('../../repositories/monsterRepository')
 
 const BattleService = {

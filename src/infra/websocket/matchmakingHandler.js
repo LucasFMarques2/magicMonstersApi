@@ -1,5 +1,3 @@
-// src/infra/websockets/matchmakingHandler.js
-
 const BattleService = require('../../core/services/battleServices/battleService')
 
 const matchmakingQueue = []

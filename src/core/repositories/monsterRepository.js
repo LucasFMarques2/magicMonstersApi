@@ -1,10 +1,7 @@
 const knex = require('../../config/database')
 
 const monsterRepository = {
-  /**
-   * @param {object} monsterData
-   */
-  
+
   create: monsterData => {
     return knex('monsters').insert(monsterData).returning('*')
   },

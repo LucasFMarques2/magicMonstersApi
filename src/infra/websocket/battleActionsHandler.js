@@ -1,5 +1,3 @@
-// src/infra/websockets/battleActionsHandler.js
-
 const BattleService = require('../../core/services/battleServices/battleService')
 
 const battleActionsHandler = (io, socket) => {

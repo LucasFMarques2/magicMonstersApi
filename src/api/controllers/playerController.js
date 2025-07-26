@@ -1,6 +1,5 @@
 const playerRepository = require('../../core/repositories/playerRepository')
 const characterRepository = require('../../core/repositories/characterRepository')
-const knex = require('../../config/database')
 
 const playerController = {
   async creatPlayer(req, res) {

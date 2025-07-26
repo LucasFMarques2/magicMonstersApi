@@ -26,7 +26,7 @@ exports.seed = async function (knex) {
 
   const monsters = await knex('monsters').insert([
     {
-      name: 'fanstamao',
+      name: 'fanstamão',
       hp: 100,
       attack: 20,
       defense: 5,
