@@ -24,27 +24,48 @@ exports.seed = async function (knex) {
 
   console.log('Personagens criados:', characters)
 
-  const monsters = await knex('monsters').insert([
-    {
-      name: 'fanstamão',
-      hp: 100,
-      attack: 20,
-      defense: 5,
-      speed: 20,
-      special_attack_name: "Raio do medo",
-      special_attack_damage: 40,
-      gif_default:
-        'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551552/monsters/olxobyzub0pt3csqrlil.gif',
-      gif_attack:
-        'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551553/monsters/ug2jb7xxh1lljntj1gd4.gif',
-      gif_defend:
-        'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551553/monsters/coub8apgyo8qdkijtqny.gif',
-      gif_special:
-        'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551553/monsters/mv2agaceyre8gdsifj6j.gif',
-      gif_hit:
-        'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551552/monsters/us77ledmjj48ybw1djyn.gif',
-    },
-  ]).returning('*')
+  const monsters = await knex('monsters')
+    .insert([
+      {
+        name: 'fanstamão',
+        hp: 100,
+        attack: 20,
+        defense: 5,
+        speed: 20,
+        special_attack_name: 'Raio do medo',
+        special_attack_damage: 40,
+        gif_default:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551552/monsters/olxobyzub0pt3csqrlil.gif',
+        gif_attack:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551553/monsters/ug2jb7xxh1lljntj1gd4.gif',
+        gif_defend:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551553/monsters/coub8apgyo8qdkijtqny.gif',
+        gif_special:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551553/monsters/mv2agaceyre8gdsifj6j.gif',
+        gif_hit:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753551552/monsters/us77ledmjj48ybw1djyn.gif',
+      },
+      {
+        name: 'Demozito',
+        hp: 100,
+        attack: 30,
+        defense: 10,
+        speed: 5,
+        special_attack_name: 'Raio do medo',
+        special_attack_damage: 40,
+        gif_default:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753766794/monsters/r83nac4bskaf7nvovbvp.gif',
+        gif_attack:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753766794/monsters/dx1gldptgsuakkljosqt.gif',
+        gif_defend:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753766794/monsters/ecfszhbdd6gsapviz71f.gif',
+        gif_special:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753766794/monsters/dsz7ud1ffodwlj72chdw.gif',
+        gif_hit:
+          'https://res.cloudinary.com/dmvhqaow3/image/upload/v1753766794/monsters/ry5sh9gnbfy2f4aurkis.gif',
+      },
+    ])
+    .returning('*')
 
    console.log('Monstro criado:', monsters)}
 
