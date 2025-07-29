@@ -51,7 +51,7 @@ Siga estas instruções para configurar e executar o projeto em seu ambiente de 
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/LucasFMarques2/magicMonstersApi.git](https://github.com/LucasFMarques2/magicMonstersApi.git)
+    git clone https://github.com/LucasFMarques2/magicMonstersApi.git
     cd magicMonstersApi
     ```
 
@@ -134,7 +134,7 @@ Lá você pode visualizar todos os endpoints, seus parâmetros, e até mesmo tes
 ## 🏗️ Arquitetura do Projeto
 
 O backend segue uma arquitetura em camadas para promover a separação de responsabilidades, refletida na seguinte estrutura de pastas:
-
+```bash
 
 src/
 |-- api/
@@ -171,7 +171,7 @@ src/
 |   |-- cloudinary.js       # Módulo de integração com o Cloudinary.
 |-- app.js                  # Configuração principal do Express (middlewares, rotas).
 |-- server.js               # Ponto de entrada que inicia o servidor HTTP e o Socket.IO.
-
+```
 
 ---
 **Desenvolvido por Lucas Freitas Marques**
