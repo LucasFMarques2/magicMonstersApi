@@ -14,8 +14,8 @@ O sistema foi construído com uma arquitetura em camadas para garantir a separa�
 ## ✨ Funcionalidades Principais
 
 -   **Gerenciamento de Jogadores:** Cadastro e exclusão de jogadores.
--   **Gerenciamento de Personagens:** CRUD completo para os personagens que os jogadores podem escolher.
--   **Gerenciamento de Monstros:** CRUD completo para os monstros, permitindo o upload de GIFs para diferentes animações (ataque, defesa, dano, etc.).
+-   **Gerenciamento de Personagens:**  Gerenciamento de criação de personagens que os jogadores podem escolher.
+-   **Gerenciamento de Monstros:** Gerenciamento de criação de monstros, permitindo o upload de GIFs para diferentes animações (ataque, defesa, dano, etc.).
 -   **Sistema de Batalha:** Lógica de batalha por turnos com ações como atacar, defender e usar habilidades especiais.
 -   **Comunicação em Tempo Real:** Uso de **Socket.IO** para matchmaking e para transmitir o estado da batalha em tempo real para os clientes.
 -   **Armazenamento de Mídia:** Integração com **Cloudinary** para upload e armazenamento dos GIFs dos monstros.
