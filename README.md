@@ -1,7 +1,7 @@
 # Magic Monsters API
 ![Node.js](https://img.shields.io/badge/Node.js-18.x-brightgreen) ![Express.js](https://img.shields.io/badge/Framework-Express.js-blue) ![Socket.IO](https://img.shields.io/badge/Real--Time-Socket.IO-yellow) ![Database](https://img.shields.io/badge/Database-PostgreSQL-blueviolet) ![License](https://img.shields.io/badge/License-ISC-lightgrey)
 
-![Imagem da Batalha no Magic Monsters](http://googleusercontent.com/file_content/0)
+![Imagem da Batalha no Magic Monsters](https://res.cloudinary.com/dmvhqaow3/image/upload/v1753767874/6cd60baa-5ccd-4b3e-885c-affafa6f30c1.png)
 
 ## 📄 Sobre o Projeto
 
