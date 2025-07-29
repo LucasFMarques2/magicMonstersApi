@@ -6,7 +6,7 @@ const characterRepository = {
   },
 
   findByName: name => {
-    return knex(characters).where({ name }).first()
+    return knex('characters').where({ name }).first()
   },
 
   findById: id => {

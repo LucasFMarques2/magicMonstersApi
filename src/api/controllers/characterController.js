@@ -2,7 +2,7 @@ const characterRepository = require('../../core/repositories/characterRepository
 const { uploadToCloudinary } = require('../../infra/cloudinary')
 
 const characterController = {
-  async listCharacters(req, res) {
+  async listCharacter(req, res) {
     try {
       const characters = await characterRepository.findAll()
       return res.status(200).json(characters)

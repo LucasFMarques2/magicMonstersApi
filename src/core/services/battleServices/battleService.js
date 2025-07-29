@@ -1,11 +1,14 @@
 const battleRepository = require('../../repositories/battleRepository')
 const monsterRepository = require('../../repositories/monsterRepository')
+const playerRepository = require('../../repositories/playerRepository')
 
 const BattleService = {
   async startBattle(player1Data, player2Data, arenaId) {
-    const [monster1, monster2] = await Promise.all([
+    const [monster1, monster2, player1, player2] = await Promise.all([
       monsterRepository.findById(player1Data.monsterId),
       monsterRepository.findById(player2Data.monsterId),
+      playerRepository.findById(player1Data.playerId),
+      playerRepository.findById(player2Data.playerId),
     ])
 
     if (!monster1 || !monster2) {
@@ -25,6 +28,7 @@ const BattleService = {
       turn: 1,
       player1: {
         id: player1Data.playerId,
+        name: player1.name,
         monsterId: monster1.id,
         hp: monster1.hp,
         isDefending: false,
@@ -32,6 +36,7 @@ const BattleService = {
       },
       player2: {
         id: player2Data.playerId,
+        name: player2.name,
         monsterId: monster2.id,
         hp: monster2.hp,
         isDefending: false,

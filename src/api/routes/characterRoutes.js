@@ -5,11 +5,11 @@ const { upload } = require('../../infra/cloudinary')
 
 router.get(
   '/',
-  /* #swagger.tags = ['Character'] */ characterController.listCharacters
+  /* #swagger.tags = ['Character'] */ characterController.listCharacter
 )
 
 router.post(
-  '/character',
+  '/',
   upload.single('gif'),
   /*
     #swagger.tags = ['Character']

@@ -19,7 +19,13 @@ const battleActionsHandler = (io, socket) => {
 
       const battleRoomId = `battle_${battleId}`
 
-      io.to(battleRoomId).emit('battle_update', { battle: updatedBattle })
+      io.to(battleRoomId).emit('battle_update', {
+        battle: updatedBattle,
+        lastAction: {
+          playerId: playerId,
+          type: actionType,
+        },
+      })
 
       if (updatedBattle.status === 'finished') {
         io.to(battleRoomId).emit('battle_end', {
